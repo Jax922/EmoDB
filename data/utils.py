@@ -3,7 +3,10 @@ import uuid
 from PIL import Image
 import imagehash
 import os
+import sys
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import log as LOG
 
 def send_request(url, params=None, headers=None, method='GET'):
     """
@@ -27,14 +30,15 @@ def send_request(url, params=None, headers=None, method='GET'):
 
         # 检查响应状态码
         if response.status_code == 200:
-            print(f"Success: {response.status_code}")
-            print("Please parse the response data as needed.")
+            LOG.log_message(f"Request to {url} successful", level='info')
+            LOG.log_message(f"Response: {response.text}", level='debug')
             return response.json()  # 返回解析后的JSON数据
         else:
-            print(f"Error: {response.status_code} - {response.text}")
+            LOG.log_message(f"Request to {url} failed. Status code: {response.status_code}", level='error')
             return None
     except Exception as e:
         print(f"An error occurred: {e}")
+        LOG.log_message(f"An error occurred: {e}", level='error')
         return None
 
 
@@ -42,8 +46,11 @@ def send_request(url, params=None, headers=None, method='GET'):
 def download_image(url, save_path):
     response = requests.get(url)
     if response.status_code == 200:
+        LOG.log_message(f"Image successfully downloaded: {save_path}", level='info')
         with open(save_path, 'wb') as f:
             f.write(response.content)
+    else:
+        LOG.log_message(f"Failed to download image. Status code: {response.status_code}", level='error')
 
 def get_image_uuid():
     return str(uuid.uuid4())
