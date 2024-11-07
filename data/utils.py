@@ -35,6 +35,7 @@ def send_request(url, params=None, headers=None, method='GET'):
             return response.json()  # 返回解析后的JSON数据
         else:
             LOG.log_message(f"Request to {url} failed. Status code: {response.status_code}", level='error')
+            LOG.log_message(f"Response: {response.text}", level='error')
             return None
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -56,7 +57,7 @@ def get_image_uuid():
     return str(uuid.uuid4())
 
 def get_save_dir():
-    return '/home/pci/dong/AIGC-image'
+    return '/Users/shedong/Documents/AIGC-image/'
 
 def create_save_dir(save_dir):
     if not os.path.exists(save_dir):
