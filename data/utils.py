@@ -8,7 +8,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import log as LOG
 
-def send_request(url, params=None, headers=None, method='GET'):
+def send_request(url, params=None, headers=None, method='GET', is_print=True):
     """
     发送HTTP请求并返回响应内容。
 
@@ -18,7 +18,8 @@ def send_request(url, params=None, headers=None, method='GET'):
     :param method: 请求方法（默认为'GET'）
     :return: 响应内容或None
     """
-    print(f"Sending {method} request to {url}...")                          
+    if is_print:
+        print(f"Sending {method} request to {url}...")                         
     try:
         # 根据请求方法发送请求
         if method.upper() == 'GET':
