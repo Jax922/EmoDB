@@ -151,8 +151,8 @@ def parse_data(items):
 
 # img_counts = len(items)
 img_counts = 0
-max_round = 200
-next_cursor = "50|1731048241008"
+max_round = 50
+next_cursor = "50|1731143460000"
 
 while next_cursor and (max_round>0):
     print(f"Round: {max_round}")
