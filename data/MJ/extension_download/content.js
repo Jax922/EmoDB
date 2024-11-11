@@ -18,7 +18,7 @@ async function downloadFile(url, fileName) {
         let a = document.createElement('a');
         let urlObject = URL.createObjectURL(blob);
         a.href = urlObject;
-        a.download = fileName; // 自定义文件名
+        // a.download = fileName; // 自定义文件名
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -30,26 +30,68 @@ async function downloadFile(url, fileName) {
     }
 }
 
+    
+ 
+getBase64=(val)=>{
+    const _this=this
+    window.URL = window.URL || window.webkitURL;
+    const xhr = new XMLHttpRequest();
+    xhr.open("get", val, true);
+    xhr.responseType = "blob";
+    xhr.onload = function () {
+      if (this.status == 200) {
+        const blob = this.response;
+        _this.createImg(blob,val)
+      } else {
+        // retry
+        getBase64(val)
+      }
+    }
+    xhr.send();
+  }
+
+
+createImg=(params,url)=> {
+    // const name=url.match(/com\/(\S*)\?/)[1]
+    // const fileName = `${name}.jpg`
+    let fileId = url.substring(29, 69); 
+    let fileName = fileId + '.webp';
+    const elink =document.createElement('a');
+    elink.download=fileName
+    elink.style.display='none'
+    elink.href = URL.createObjectURL(params);
+    document.body.appendChild(elink);
+    elink.click();
+    URL.revokeObjectURL(elink.href); // 释放URL 对象
+    document.body.removeChild(elink);
+}
+
 window.addEventListener('load', async () => {
     await sleep(3000);
     //  for loop the data list
     // let data1 = data.slice(0,2);
-    data.forEach(async (item, index) => {
+    let data1 = data;
+    data1.forEach(async (item, index) => {
         //  open the detail page
         let url = item.small_img_url
         // let a = document.createElement('a');
         // a.href = url;
-        // a.target = "_blank";
+        // // a.target = "_";
+        // // do not blank
+        // a.target =  "_self"
+    
 
         // 使用正则表达式提取 URL 中的特定段 "00159e23-f228-40e1-92d7-6be5343fe8d9"
-        let match = url.match(/\/([a-zA-Z0-9-]{36})\//);
-        let fileName = match ? match[1] + '.webp' : 'default_name.webp'; // 如果匹配到，就用匹配的结果，否则使用默认名称
+        // let match = url.match(/\/([a-zA-Z0-9-]{36})\//);
+        // let fileId = url.substring(29, 69); 
+        // let fileName = fileId + '.webp'; // 如果匹配到，就用匹配的结果，否则使用默认名称
 
         // a.download = fileName; 
         // document.body.appendChild(a);
         // a.click();
         // document.body.removeChild(a);
-        downloadFile(url, `${fileName}`);
-        await sleep(1000);
+        // downloadFile(url, `${fileName}`);
+        getBase64(url)
+        await sleep(3000);
     });
 });

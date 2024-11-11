@@ -5,6 +5,35 @@ let round_counts = 0
 let all_counts = 0
 let save_round = 0
 
+function simulateRightClick(element) {
+    // let element = document.getElementById('targetElement');  // 获取目标元素
+  
+    if (element) {
+      // 创建右键点击事件
+      let event = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        button: 2,  // 2 为右键
+        clientX: 100, // 右键点击的 X 坐标
+        clientY: 100, // 右键点击的 Y 坐标
+      });
+  
+      // 派发事件
+      element.dispatchEvent(event);
+      setTimeout(() => {
+        console.log("right click")
+        download_img()
+      }, 1000)
+    }
+  }
+
+function download_img() {
+    const menu = document.querySelector("#contextMenu")
+    const btns = menu.querySelectorAll("button")
+    btns[1].click()
+}
+
 function get_info() {
     // imgs
     const img_elems = document.querySelectorAll("div.shadow-2xl")[0].querySelectorAll("img")
@@ -14,6 +43,8 @@ function get_info() {
     const prompt_text = document.querySelector("#lightboxPrompt").querySelectorAll("p")[0].innerText
     // create_time
     const create_time = document.querySelectorAll("span.font-medium.relative")[0].title
+
+    simulateRightClick(img_elems[1])
     
     let data_item = {
         small_img_url: small_img_url,
@@ -42,6 +73,8 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+
 window.addEventListener('load', async () => {
 
     //  find the a link
@@ -60,7 +93,7 @@ window.addEventListener('load', async () => {
         all_counts += 1
         await sleep(2000)
     }
-    // 
+    
     all_img_buttons = document.querySelectorAll("img.progress-img")
     while (all_img_buttons.length > 10 && all_counts <= 5000) {
         all_img_buttons[9].click()
