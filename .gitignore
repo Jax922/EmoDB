@@ -4,3 +4,4 @@ __pycache__/
 logs/
 raw_data/
 make_data.py
+discord_log/
