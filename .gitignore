@@ -5,3 +5,4 @@ logs/
 raw_data/
 make_data.py
 test.py
+discord_log/
